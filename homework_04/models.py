@@ -7,8 +7,10 @@ from sqlalchemy import (
     ForeignKey,
     Text
 )
+import os
 
-PG_CONN_URI = "postgresql+asyncpg://username:passwd!@localhost:5434/blog"
+# PG_CONN_URI = "postgresql+asyncpg://username:passwd!@localhost:5434/blog"
+PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://username:passwd!@localhost:5434/blog"
 PG_ECHO = True
 
 engine = create_async_engine(PG_CONN_URI, echo=PG_ECHO)
@@ -72,4 +74,3 @@ async def save_user_and_post_in_db(user_data, post_data):
                     title=post['title'],
                     body=post['body']
                 ))
-
