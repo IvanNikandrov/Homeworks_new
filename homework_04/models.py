@@ -24,7 +24,7 @@ class User(Base):
     name = Column(String(), nullable=False, default='', server_default='')
     username = Column(String(20), nullable=False, default='', server_default='')
     email = Column(String(), nullable=False, default='', server_default='')
-    posts = relationship('posts', back_populates='users')
+    posts = relationship('Post', back_populates='users')
 
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, name={self.name}, ' \
@@ -40,7 +40,7 @@ class Post(Base):
     title = Column(String(), nullable=False, default='', server_default='')
     body = Column(Text(), nullable=False, default='', server_default='')
     user_id = Column(Integer(), ForeignKey('users.id'), nullable=False)
-    users = relationship('users', back_populates='posts')
+    users = relationship('User', back_populates='posts')
 
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, title={self.title}'
@@ -55,24 +55,21 @@ async def create_tables():
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def save_user_in_db(data):
+async def save_user_and_post_in_db(user_data, post_data):
     async with async_session() as session:
         async with session.begin():
-            for user in data:
+            for user in user_data:
                 session.add(User(
+                    id=user['id'],
                     name=user['name'],
                     username=user['username'],
                     email=user['email']
                 ))
-
-async def save_post_in_db(data):
-    async with async_session() as session:
-        async with session.begin():
-            for post in data:
+            for post in post_data:
                 session.add(Post(
+                    id=post['id'],
                     user_id=post['userId'],
                     title=post['title'],
                     body=post['body']
                 ))
-
 
