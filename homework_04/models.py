@@ -26,7 +26,7 @@ class User(Base):
     name = Column(String(), nullable=False, default='', server_default='')
     username = Column(String(20), nullable=False, default='', server_default='')
     email = Column(String(), nullable=False, default='', server_default='')
-    posts = relationship('Post', back_populates='users')
+    posts = relationship('Post', back_populates='user')
 
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, name={self.name}, ' \
@@ -42,7 +42,7 @@ class Post(Base):
     title = Column(String(), nullable=False, default='', server_default='')
     body = Column(Text(), nullable=False, default='', server_default='')
     user_id = Column(Integer(), ForeignKey('users.id'), nullable=False)
-    users = relationship('User', back_populates='posts')
+    user = relationship('User', back_populates='posts')
 
     def __str__(self):
         return f'{self.__class__.__name__}(id={self.id}, title={self.title}'
