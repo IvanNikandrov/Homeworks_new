@@ -17,7 +17,3 @@ async def fetch_json(url):
             return await response.json()
 
 
-if __name__ == '__main__':
-    users_data = asyncio.run(fetch_json(USERS_DATA_URL))
-    posts_data = asyncio.run(fetch_json(POSTS_DATA_URL))
-    print(posts_data)
