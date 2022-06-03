@@ -15,8 +15,7 @@ PG_ECHO = True
 
 engine = create_async_engine(PG_CONN_URI, echo=PG_ECHO)
 
-async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
-
+Session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 Base = declarative_base()
 
 
@@ -58,7 +57,7 @@ async def create_tables():
 
 
 async def save_user_and_post_in_db(user_data, post_data):
-    async with async_session() as session:
+    async with Session() as session:
         async with session.begin():
             for user in user_data:
                 session.add(User(
